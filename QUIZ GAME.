@@ -1,0 +1,150 @@
+ranking = []
+
+def ask_questions(questions, options, answers):
+    score = 0
+
+    for i, question in enumerate(questions):
+        print("\n----------------------")
+        print(question)
+        for option in options[i]:
+            print(option)
+
+        guess = input("Enter (A, B, C, D): ").upper()
+
+        if guess == answers[i]:
+            score += 1
+            print("CORRECT!")
+        else:
+            print("INCORRECT!")
+            print(f"Correct answer: {answers[i]}")
+
+    return score
+
+def quiz_game():
+    print("----------------------")
+    print("       QUIZ GAME      ")
+    print("----------------------")
+
+    name = input("Name: ")
+    section = input("Section: ")
+    date = input("Date: ")
+
+    user_scores = {}  # store category name and score
+
+    while True:
+        print("\nChoose a category:")
+        print("1. Math")
+        print("2. Science")
+        print("3. English")
+
+        choice = input("Enter (1/2/3): ")
+
+        if choice == "1":
+            category = "Math"
+            questions = (
+                "What is 5 + 7?",
+                "What is 9 x 3?",
+                "What is 15 ÷ 3?",
+                "What is 12 - 4?",
+                "What is 6²?"
+            )
+            options = (
+                ("A. 10", "B. 11", "C. 12", "D. 13"),
+                ("A. 27", "B. 21", "C. 18", "D. 24"),
+                ("A. 3", "B. 4", "C. 5", "D. 6"),
+                ("A. 6", "B. 7", "C. 8", "D. 9"),
+                ("A. 12", "B. 24", "C. 36", "D. 18")
+            )
+            answers = ("C", "A", "C", "C", "C")
+
+        elif choice == "2":
+            category = "Science"
+            questions = (
+                "How many elements are in the periodic table?",
+                "Which animal lays the largest eggs?",
+                "What is the most abundant gas in Earth's atmosphere?",
+                "How many bones are in the human body?",
+                "Which planet is the hottest?"
+            )
+            options = (
+                ("A. 116", "B. 117", "C. 118", "D. 119"),
+                ("A. Whale", "B. Crocodile", "C. Elephant", "D. Ostrich"),
+                ("A. Nitrogen", "B. Oxygen", "C. CO2", "D. Hydrogen"),
+                ("A. 206", "B. 207", "C. 208", "D. 209"),
+                ("A. Mercury", "B. Venus", "C. Earth", "D. Mars")
+            )
+            answers = ("C", "D", "A", "A", "B")
+
+        elif choice == "3":
+            category = "English"
+            questions = (
+                "What is the synonym of 'happy'?",
+                "What is the antonym of 'big'?",
+                "Choose the correct spelling:",
+                "What is a noun?",
+                "Which is a verb?"
+            )
+            options = (
+                ("A. Sad", "B. Joyful", "C. Angry", "D. Tired"),
+                ("A. Large", "B. Huge", "C. Small", "D. Tall"),
+                ("A. Recieve", "B. Receive", "C. Receeve", "D. Recive"),
+                ("A. Action word", "B. Naming word", "C. Describing word", "D. None"),
+                ("A. Run", "B. Blue", "C. Table", "D. Happy")
+            )
+            answers = ("B", "C", "B", "B", "A")
+
+        else:
+            print("Invalid choice! Please enter 1, 2, or 3.")
+            continue
+
+        score = ask_questions(questions, options, answers)
+        user_scores[category] = score
+
+        print("\n----------------------")
+        print(f"Category: {category}")
+        print(f"Score: {score}/5")
+        print("----------------------")
+
+        again_category = input("Do you want to take another category? (yes/no): ").lower()
+        if again_category != "yes":
+            break
+
+    # Calculate average score
+    average_score = sum(user_scores.values()) / len(user_scores)
+    ranking.append([name, average_score, user_scores])
+
+    print("\n======================")
+    print(f"Hello {name} from {section}")
+    print(f"Quiz answered on: {date}")
+    print(f"Average Score across categories: {average_score:.2f}/5")
+    print("Category-wise scores:")
+    for cat, sc in user_scores.items():
+        print(f"- {cat}: {sc}/5")
+    print("Thank you for playing!")
+
+def show_ranking():
+    print("\n======================")
+    print("       RANKING        ")
+    print("======================")
+
+    sorted_rank = sorted(ranking, key=lambda x: x[1], reverse=True)
+    for i, player in enumerate(sorted_rank, start=1):
+        name, avg, scores = player
+        print(f"{i}. {name} - Average: {avg:.2f}/5")
+        print("   Category Scores:")
+        for cat, sc in scores.items():
+            print(f"   - {cat}: {sc}/5")
+        print("----------------------")
+
+# Main loop for multiple players
+while True:
+    quiz_game()
+    show_ranking()
+    
+    another_player = input("\nDo you want to add another player? (yes/no): ").lower()
+    if another_player != "yes":
+        break
+
+print("\nFinal Rankings:")
+show_ranking()
+print("\nGame Ended. Thank you!")
